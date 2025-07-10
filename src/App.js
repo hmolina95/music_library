@@ -1,26 +1,37 @@
-import React, { Component } from 'react';
-import Header from './components/header';
-import Song from './components/song';
+import React, { useState, useEffect } from 'react';
+import Header from './components/Header/header';
+import Song from './components/Song/song';
+import Library from './components/Library/Library';
+import SearchResults from './components/SearchResults/SearchResults';
 import './App.css';
 
-class App extends Component {
-  componentDidMount() {
-    console.log("La app se ha cargado correctamente");
-  }
+const App = () => {
 
-  render() {
-    return (
-      <div className="App">
-        <Header />
-        <div className="song-list">
-          <Song title="Let It Be" artist="The Beatles" duration="3:50" />
-          <Song title="Blinding Lights" artist="The Weeknd" duration="3:20" />
-          <Song title="Bohemian Rhapsody" artist="Queen" duration="5:55" />
-          <Song title="All Too Well (10 minute version) (Taylor's Version) (From the Vault)" artist="Taylor Swift" duration="10:00" />
-        </div>
-      </div>
-    );
-  }
+  const [searchResults] = useState([
+    { id: 1, title: "Apple", artist: "Charli XCX", duration: "2:49" },
+    { id: 2, title: "Wish You Were Here", artist: "Pink Floyd", duration: "5:04" },
+    { id: 3, title: "Born To Die", artist: "Lana Del Rey", duration: "3:34" }
+  ])
+
+  const [library, setLibrary] = useState([]);
+
+  const handleAddToLibrary = (song) => {
+    if (!library.find(s => s.id === song.id)) {
+      setLibrary([...library, song]);
+    }
+  };
+
+  useEffect(() => {
+    console.log('La biblioteca ha sido actualizada:', library);
+  }, [library]);
+
+  return (
+    <div className="App">
+      <Header />
+      <SearchResults songs={searchResults} onAddToLibrary={handleAddToLibrary} />
+      <Library songs={library} />
+    </div>
+  );
 }
 
 export default App;
