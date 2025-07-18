@@ -21,3 +21,9 @@ button {
         transform: scale(1.03);
     }
 }
+
+.song-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
