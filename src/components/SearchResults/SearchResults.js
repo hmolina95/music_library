@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 import Song from '../Song/song';
-import Styles from '../SearchResults/styles.css';
+import { Button, ResultsCard, ResultsContainer, ResultsTitle } from '../../Themes/SearchResults';
+import { SearchBarButton } from '../../Themes/SearchBar';
 
 const SearchResults = ({ songs, onAddToLibrary }) => {
     return (
-        <div>
-            <h2>Resultados de búsqueda</h2>
+        <ResultsContainer>
+            <ResultsTitle>Resultados de búsqueda</ResultsTitle>
             <div>
                 {songs.map(song => (
-                    <div key={song.id} className="search-song">
+                    <ResultsCard key={song.id} className="search-song">
                         <Link to={`/song/${song.id}`} className="song-link">
                             <Song
                                 title={song.title}
@@ -17,11 +18,11 @@ const SearchResults = ({ songs, onAddToLibrary }) => {
                                 duration={song.duration}
                             />
                         </Link>
-                        <button onClick={() => onAddToLibrary(song)}>Agregar a mi biblioteca</button>
-                    </div>
+                        <Button onClick={() => onAddToLibrary(song)}>Agregar a mi biblioteca</Button>
+                    </ResultsCard>
                 ))}
             </div>
-        </div>
+        </ResultsContainer>
     );
 };
 

@@ -1,22 +1,25 @@
 import React from 'react';
 import Song from '../Song/song';
-import Styles from '../Library/styles.css';
+import {  AddedSongsCard, LibraryContainer, LibraryTitle } from '../../Themes/Library';
 
 const Library = ({ songs }) => {
     return (
-        <div>
-            <h2>Mi Biblioteca</h2>
-            <div className="song-list">
+        <LibraryContainer>
+            <LibraryTitle>Mi Biblioteca</LibraryTitle>
+            <div>
                 {songs.map(song => (
-                    <Song 
-                    key={song.id}
-                    title={song.title}
-                    artist={song.artist}
-                    duration={song.duration}
-                    />
+                    <AddedSongsCard>
+                        <Song 
+                        key={song.id}
+                        title={song.title}
+                        artist={song.artist}
+                        duration={song.duration}
+                        inLibrary={true}
+                        />
+                    </AddedSongsCard>
                 ))}
             </div>
-        </div>
+        </LibraryContainer>
     );
 };
 

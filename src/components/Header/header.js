@@ -1,11 +1,11 @@
 import React from 'react';
-import Styles from './styles.css';
+import { AppTitle, HeaderApp } from '../../Themes/Header';
 
 const Header = () => {
     return (
-        <header>
-            <h1>Biblioteca Musical</h1>
-        </header>
+        <HeaderApp>
+            <AppTitle>Biblioteca Musical</AppTitle>
+        </HeaderApp>
     );
 };
 

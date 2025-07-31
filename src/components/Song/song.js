@@ -1,13 +1,13 @@
 import React from 'react';
-import Styles from '../Song/styles.css';
+import { SongContainer, SongTitle } from '../../Themes/Song';
 
-const Song = ({ title, artist, duration }) => {
+const Song = ({ title, artist, duration, inLibrary }) => {
     return (
-        <div className="song">
-            <h3>{title}</h3>
+        <SongContainer>
+            <SongTitle inLibrary={inLibrary}>{title}</SongTitle>
             <p>Artista: {artist}</p>
             <p>Duración: {duration}</p>
-        </div>
+        </SongContainer>
     );
 };
 

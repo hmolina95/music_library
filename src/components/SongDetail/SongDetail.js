@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { SongDetailContainer } from '../../Themes/SongDetail';
+import { SongTitle } from '../../Themes/Song';
 
 const SongDetail = () => {
   const { id } = useParams();
@@ -7,11 +9,13 @@ const SongDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const proxy = 'https://cors-anywhere.herokuapp.com/';
-  const url = `${proxy}https://theaudiodb.com/api/v1/json/2/track.php?h=${id}`;
-
   useEffect(() => {
     const fetchSong = async () => {
+      if(!id) return;
+
+      const proxy = 'https://cors-anywhere.herokuapp.com/';
+      const url = `${proxy}https://theaudiodb.com/api/v1/json/2/track.php?h=${id}`;
+
       setIsLoading(true);
       setError(null);
 
@@ -41,19 +45,19 @@ const SongDetail = () => {
     };
 
     fetchSong();
-  }, [url]);
+  }, [id]);
 
   if (isLoading) return <p>Cargando canción...</p>;
   if (error) return <p>{error}</p>;
   if (!song) return null;
 
   return (
-    <div>
-      <h2>{song.title}</h2>
+    <SongDetailContainer>
+      <SongTitle>{song.title}</SongTitle>
       <p>Artista: {song.artist}</p>
       <p>Álbum: {song.album}</p>
       <p>Duración: {song.duration}</p>
-    </div>
+    </SongDetailContainer>
   );
 };
 

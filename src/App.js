@@ -8,7 +8,10 @@ import SearchBar from './components/SearchBar/SearchBar';
 import SongDetail from './components/SongDetail/SongDetail';
 
 import useFetch from './hooks/useFetch';
-import './App.css';
+import { ThemeProvider } from 'styled-components';
+import Theme from './Themes/index'
+import GlobalStyle from './Themes/GlobalStyles';
+
 
 const App = () => {
   const [artist, setArtist] = useState('');
@@ -23,10 +26,21 @@ const App = () => {
   const { data, isLoading, error, retry } = useFetch(url);
 
   useEffect(() => {
+    if (!data || data.length === 0) {
+      setSongs([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     const fetchTracks = async (albums) => {
       try {
         const requests = albums.map((album) =>
-          fetch(`${proxy}https://theaudiodb.com/api/v1/json/2/track.php?m=${album.idAlbum}`).then((res) => res.json())
+          fetch(`${proxy}https://theaudiodb.com/api/v1/json/2/track.php?m=${album.idAlbum}`, { signal }).then((res) => {
+            if (!res.ok) throw new Error('Error en una petición de tracks');
+            return res.json();
+          })
         );
 
         const responses = await Promise.all(requests);
@@ -48,16 +62,20 @@ const App = () => {
 
         setSongs(allTracks);
       } catch (err) {
-        console.error('Error al obtener tracks:', err);
-        setSongs([]);
+        if (err.name === 'AbortError') {
+          console.log('Petición abortada por nueva búsqueda');
+        } else {
+          console.error('Error al obtener tracks:', err);
+          setSongs([]);
+        }
       }
     };
 
-    if (data && data.length > 0) {
-      fetchTracks(data);
-    } else {
-      setSongs([]);
-    }
+    fetchTracks(data);
+
+    return () => {
+      controller.abort();
+    };
   }, [data]);
 
   const handleAddToLibrary = (song) => {
@@ -71,33 +89,36 @@ const App = () => {
   }, [library]);
 
   return (
-    <div className="App">
-      <Header />
+    <ThemeProvider theme={Theme}>
+      <GlobalStyle />
+      <div className="App">
+        <Header />
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <SearchBar onSearch={setArtist} />
-              {isLoading && <p>Cargando álbumes y canciones...</p>}
-              {error && (
-                <div>
-                  <p>Hubo un problema al cargar los datos: {error}</p>
-                  <button onClick={retry}>Reintentar</button>
-                </div>
-              )}
-              {!isLoading && !error && (
-                <SearchResults songs={songs.slice(0,10)} onAddToLibrary={handleAddToLibrary} />
-              )}
-              <Library songs={library} />
-            </>
-          }
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <SearchBar onSearch={setArtist} />
+                {isLoading && <p>Cargando álbumes y canciones...</p>}
+                {error && (
+                  <div>
+                    <p>Hubo un problema al cargar los datos: {error}</p>
+                    <button onClick={retry}>Reintentar</button>
+                  </div>
+                )}
+                {!isLoading && !error && (
+                  <SearchResults songs={songs.slice(0, 10)} onAddToLibrary={handleAddToLibrary} />
+                )}
+                <Library songs={library} />
+              </>
+            }
+          />
 
-        <Route path="/song/:id" element={<SongDetail songs={songs} />} />
-      </Routes>
-    </div>
+          <Route path="/song/:id" element={<SongDetail />} />
+        </Routes>
+      </div>
+    </ThemeProvider>
   );
 };
 

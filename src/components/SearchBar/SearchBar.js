@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Styles from './styles.css';
+import { SearchBarButton, SearchBarContainer, SearchInput } from '../../Themes/SearchBar';
 
 const SearchBar = ({ onSearch }) => {
     const [artist, setArtist] = useState('');
@@ -11,15 +11,17 @@ const SearchBar = ({ onSearch }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input
-                type="text"
-                value={artist}
-                onChange={(e) => setArtist(e.target.value)}
-                placeholder="Buscar artista..."
-            />
-            <button type="submit">Buscar</button>
-        </form>
+        <SearchBarContainer>
+            <form onSubmit={handleSubmit}>
+                <SearchInput
+                    type="text"
+                    value={artist}
+                    onChange={(e) => setArtist(e.target.value)}
+                    placeholder="Buscar artista..."
+                />
+                <SearchBarButton type="submit">Buscar</SearchBarButton>
+            </form>
+        </SearchBarContainer>
     );
 };
 
