@@ -2,9 +2,16 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import Song from '../Song/song';
 import { Button, ResultsCard, ResultsContainer, ResultsTitle } from '../../Themes/SearchResults';
-import { SearchBarButton } from '../../Themes/SearchBar';
+import { useDispatch } from 'react-redux';
+import { addSong } from '../../redux/libraryAction';
 
-const SearchResults = ({ songs, onAddToLibrary }) => {
+const SearchResults = ({ songs }) => {
+    const dispatch = useDispatch();
+
+    const handleAddToLibrary = (song) => {
+        dispatch(addSong(song));
+    }
+
     return (
         <ResultsContainer>
             <ResultsTitle>Resultados de búsqueda</ResultsTitle>
@@ -18,7 +25,7 @@ const SearchResults = ({ songs, onAddToLibrary }) => {
                                 duration={song.duration}
                             />
                         </Link>
-                        <Button onClick={() => onAddToLibrary(song)}>Agregar a mi biblioteca</Button>
+                        <Button onClick={() => handleAddToLibrary (song)}>Agregar a mi biblioteca</Button>
                     </ResultsCard>
                 ))}
             </div>

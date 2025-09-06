@@ -26,10 +26,21 @@ const AddedSongsCard = styled.div `
     border-radius: 10px;
     margin-top: 10px;
 `
+const RemoveButton = styled.button `
+    background-color:${props => props.theme.colors.light};
+    color: #FAF9F6;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-weight: ${props => props.theme.fonts.smWeight};
+    font-size: 0.9rem;
+    cursor: pointer;
+`
 
 
 export {
     LibraryContainer,
     LibraryTitle,
-    AddedSongsCard
+    AddedSongsCard,
+    RemoveButton
 }
